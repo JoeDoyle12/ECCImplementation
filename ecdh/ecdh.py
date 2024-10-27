@@ -3,9 +3,7 @@ ecdh.py: Define a Diffie-Helmann asymmetric key exchange protocol based on our p
 Author: Joe Doyle
 """
 
-from ec.elliptic_curve import EllipticCurve
-
-class EDCH:
+class ECDH:
     def __init__(self, p, priv, curve):
         """
         Define a class for Diffie-Helmann key exchanges using ECC
@@ -23,11 +21,15 @@ class EDCH:
         """
         Return the shared key from public key
 
-        public: Point on elliptic curve self.curve corresponding to bob*P
+        public: Point on elliptic curve self.curve corresponding to (others shared)*P
         """
 
         return self.curve.scalar_product(self.priv, public)
     
     def get_public(self):
+        """
+        Return the public key to be shared with the other actor
+        """
+
         return self.curve.scalar_product(self.priv, self.p)
         
