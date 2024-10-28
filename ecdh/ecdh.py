@@ -3,19 +3,29 @@ ecdh.py: Define a Diffie-Helmann asymmetric key exchange protocol based on our p
 Author: Joe Doyle
 """
 
+import secrets
+
 class ECDH:
-    def __init__(self, p, priv, curve):
+    def __init__(self, p, curve, order=0):
         """
         Define a class for Diffie-Helmann key exchanges using ECC
 
         p: random public point that forms a cyclic subgroup
-        priv: private key
+        order: order of p. Only used if part of an ECActor object
         curve: public EllipticCurve object
         """
 
         self.p = p
-        self.priv = priv
         self.curve = curve
+        self.priv = self.rand_private()
+    
+    def rand_private(self, bytes=124):
+        """
+        Generate a secure random private key of length bytes
+        """
+
+        return int.from_bytes(secrets.token_bytes(bytes))
+        
     
     def get_shared(self, public):
         """

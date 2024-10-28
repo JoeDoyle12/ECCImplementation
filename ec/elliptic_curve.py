@@ -5,7 +5,9 @@ Author: Joe Doyle
 Lots drawn from this paper: https://math.uchicago.edu/~may/REU2020/REUPapers/Shevchuk.pdf
 """
 
-import math
+
+import secrets
+import binascii
 
 class EllipticCurve:
     def __init__(self, a, b, p):
@@ -74,26 +76,71 @@ class EllipticCurve:
         return (point[0], (-1 * point[1]) % self.p)
 
 
-    def get_point_from_x(self, x, pos = True):
+    def get_y_from_x(self, x, pos = False):
         """
         Get a point on the curve from an x coordinate (pos controls if it is the positive or negative point corresponding to the point)
+        
+        Note that this function only works if self.p is congruent to 3 (mod 4)
+        """
+        y_sq = (pow(x, 3, self.p) + 7) % self.p
+        y = pow(y_sq, (self.p + 1) // 4, self.p)
+
+        if pos:
+            y = (-y) % self.p
+        
+        return y
+    
+    def random_point(self):
+        """
+        Get a securely random point on the elliptic curve
         """
 
-        for y in range(self.p):
-            if (y ** 2) % self.p == (x ** 3 + self.a * x + self.b) % self.p:
-                point = (x, y % self.p)
-                self.assert_point((x, y % self.p))
-                if pos:
-                    return point
-                else:
-                    return self.neg(point)
+        x, y = 0, 0
+
+        while True:
+            x = int.from_bytes(secrets.token_bytes(124)) % self.p
+            y = self.get_y_from_x(x, pos=secrets.choice([True, False]))
+            
+            if self.is_point((x, y)):
+                break
+
+
+        self.assert_point((x, y))
+
+        return (x, y)
+
+    def decompress_public_key(self, pk):
+        """
+        Takes in a hex string pk corresponding to the compressed public key of a point
+        Returns the (x, y) coordinates of that point on the Elliptic Curve
+
+        Note that this only works when self.p is congruent to 3 mod 4
+
+        Inspiration taken from here: https://bitcoin.stackexchange.com/questions/86234/how-to-uncompress-a-public-key
+        """
+        
+        pk = binascii.unhexlify(pk)
+        x = int.from_bytes(pk[1:33], byteorder='big')
+        y = self.get_y_from_x(x)
+        if y % 2 != pk[0] % 2:
+            y = self.p - y
+        return (x, y)
+
+    
+    def is_point(self, p):
+        """
+        Return true if the point is on the curve, false otherwise
+        """
+        
+        if p == self.PTATINF:
+            return True
+
+        return pow(p[1], 2, self.p) == (pow(p[0], 3, self.p) + self.a * p[0] + self.b) % self.p
+
 
     def assert_point(self, p):
         """
         Assert that a point is on the elliptic curve
         """
 
-        if p == self.PTATINF:
-            return
-
-        assert (p[1] ** 2) % self.p == (p[0] ** 3 + self.a * p[0] + self.b) % self.p
+        assert self.is_point(p)
