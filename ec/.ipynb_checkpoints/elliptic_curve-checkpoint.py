@@ -39,8 +39,6 @@ class EllipticCurve:
         elif p2 == self.PTATINF:
             return p1
         elif p1 == p2:
-            if p1[0] == 0:
-                return self.PTATINF
             print(2 * p1[1])
             slope = (((3 * p1[0]**2 + self.a) % self.p) * pow(2 * p1[1], -1, self.p)) % self.p
         elif p1[0] == p2[0]:
