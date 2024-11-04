@@ -18,7 +18,6 @@ class ECDH:
         self.p = p
         self.curve = curve
         self.priv = self.rand_private()
-        print(self.priv)
     
     def rand_private(self, bytes=124):
         """
