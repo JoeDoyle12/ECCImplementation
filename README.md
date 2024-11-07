@@ -1,6 +1,8 @@
 # ECCImplementation
 This is a Python Implementation of Elliptical Curve Cryptography created as my Final Project for CSC471: Cryptography.
 ---
+## UML Diagram
+<img src="images/uml_diagram.png" alt="UML Diagram"/>
 ## Elliptic Curve Implementation (`ec.elliptic_curve.py`)
 Defines an EllipticCurve object with the following properties and functions:
 
