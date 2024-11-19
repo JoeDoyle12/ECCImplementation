@@ -6,8 +6,8 @@ Author: Joe Doyle
 import time
 import matplotlib.pyplot as plt 
 
-from ec.elliptic_curve import EllipticCurve
-from ec_elgamal.ec_actor import ECActor
+from ecc.ec import EllipticCurve
+from ecc.ec_elgamal import ECActor
 
 # Define Secp256k1, the elliptic curve that Bitcoin uses. It is defined over a finite field Z/pZ, so every point is a generator
 

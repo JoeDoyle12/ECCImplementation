@@ -3,9 +3,9 @@ ecdh_test.py: Test our ECDH class
 Author: Joe Doyle
 """
 
-from ec.elliptic_curve import EllipticCurve
-from ecdh.ecdh import ECDH
-from ec_elgamal.ec_actor import ECActor
+from ecc.ec import EllipticCurve
+from ecc.ecdh import ECDH
+from ecc.ec_elgamal import ECActor
 
 # Define Secp256k1, the elliptic curve that Bitcoin uses. It is defined over a finite field Z/pZ, so every point is a generator
 

@@ -5,7 +5,7 @@ Author: Joe Doyle
 Outline of the ElGamal Cryptosystem found here: https://math.uchicago.edu/~may/REU2020/REUPapers/Shevchuk.pdf
 """
 
-from ecdh.ecdh import ECDH
+from ecc.ecdh import ECDH
 
 class ECActor:
     def __init__(self, p, ord_p, curve):
